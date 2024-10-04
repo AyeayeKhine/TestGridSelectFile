@@ -81,6 +81,22 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\app-menu.js",
+      "PackagePath": "staticwebassets\\js\\app-menu.js"
+    },
+    {
+      "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\app-menu.min.js",
+      "PackagePath": "staticwebassets\\js\\app-menu.min.js"
+    },
+    {
+      "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\app.js",
+      "PackagePath": "staticwebassets\\js\\app.js"
+    },
+    {
+      "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\app.min.js",
+      "PackagePath": "staticwebassets\\js\\app.min.js"
+    },
+    {
       "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\dx.all.debug.js",
       "PackagePath": "staticwebassets\\js\\dx.all.debug.js"
     },
@@ -105,8 +121,20 @@
       "PackagePath": "staticwebassets\\js\\jquery.min.js"
     },
     {
+      "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\navs.js",
+      "PackagePath": "staticwebassets\\js\\navs.js"
+    },
+    {
+      "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\navs.min.js",
+      "PackagePath": "staticwebassets\\js\\navs.min.js"
+    },
+    {
       "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\js\\vendors.min.js",
+      "PackagePath": "staticwebassets\\js\\vendors.min.js"
     },
     {
       "Id": "D:\\Infosolve\\TestGridSelectFile\\TestGridSelectFile\\wwwroot\\lib\\bootstrap\\LICENSE",

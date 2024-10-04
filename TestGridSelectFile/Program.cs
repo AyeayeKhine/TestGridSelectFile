@@ -2,13 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using TestGridSelectFile.Models;
-using TestGridSelectFile.TestGridSelectFile.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<TestDb2Context>(
+builder.Services.AddDbContext<GmsContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("CompanyDB")
         )
