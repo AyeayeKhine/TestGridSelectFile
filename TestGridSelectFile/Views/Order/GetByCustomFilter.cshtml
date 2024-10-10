@@ -133,12 +133,24 @@
             columns: [
 
                 { dataField: "iD", caption: "ID", headerFilter: false, sortIndex: 0, sortOrder: "desc", visible: false },
-                { dataField: "orderItemID", caption: "OrderItemID", headerFilter: false, sortOrder: "desc", visible: false },
+                { dataField: "itemID", caption: "ItemID", headerFilter: false, sortOrder: "desc", visible: false },
 
-                { dataField: "orderItemCode", caption: "OrderItemCode", headerFilter: false, sortOrder: "desc" },
+                { dataField: "itemCode", caption: "ItemCode", headerFilter: false, sortOrder: "desc" },
 
                 {
-                    dataField: "orderItemDescription", caption: "OrderItemDescription", headerFilter: false
+                    dataField: "itemDescription", caption: "ItemDescription", headerFilter: false
+                },
+                {
+                    dataField: "categoryCode", caption: "CategoryCode", headerFilter: false
+                },
+                {
+                    dataField: "categoryID", caption: "Category", hidingPriority: 36,
+                    calculateDisplayValue: "CategoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Order/CategoryDropdown", null, null),
+                    }
                 },
                 {
                     dataField: "orderCode", caption: "OrderCode", headerFilter: false
@@ -177,18 +189,7 @@
                         dataSource: GetDataSource("/Order/SmithDropdown", null, null),
                     }
                 },
-                {
-                    dataField: "categoryCode", caption: "CategoryCode", headerFilter: false
-                },
-                {
-                    dataField: "categoryID", caption: "Category", hidingPriority: 36,
-                    calculateDisplayValue: "CategoryDescription",
-                    lookup: {
-                        valueExpr: "id",
-                        displayExpr: "description",
-                        dataSource: GetDataSource("/Order/CategoryDropdown", null, null),
-                    }
-                },
+                
                 {
                     dataField: "quantity", caption: "Quantity", headerFilter: false
                 },

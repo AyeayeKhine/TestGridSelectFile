@@ -51,7 +51,7 @@ public partial class StockItem
     /// </summary>
     public DateOnly? TransactionDate { get; set; }
 
-    public Guid? StoreId { get; set; }
+    public long? StoreId { get; set; }
 
     public bool Active { get; set; }
 

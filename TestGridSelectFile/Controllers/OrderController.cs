@@ -75,19 +75,19 @@ namespace TestGridSelectFile.Controllers
                 ViewData.Add("SearchInfo", searchInfo);
                 searchInfo.PageSize = searchInfo.Take == 0 ? 10 : searchInfo.Take;
                 searchInfo.CurrentPageIndex = searchInfo.Skip == 0 ? 0 : (searchInfo.Skip / searchInfo.Take) + 1;
-                ResponseResult<OrderOrderItem>? page = new ResponseResult<OrderOrderItem>();
+                ResponseResult<StockItem>? page = new ResponseResult<StockItem>();
                 if (ids != null && ids.Length > 0)
                 {
                     foreach (var id in ids) {
-                        var changedresult = _context.OrderOrderItems.Where(i => i.Id == id).FirstOrDefault();
+                        var changedresult = _context.StockItems.Where(i => i.Id == id).FirstOrDefault();
                         changedresult.Enabled = false;
-                        changedresult.ItemOrderStatus = 0;
-                        _context.OrderOrderItems.Attach(changedresult);
+                        changedresult.StoreId = 1;
+                        _context.StockItems.Attach(changedresult);
                         _context.SaveChanges();
                     }
                     
                 }
-                page = await _context.OrderOrderItems.Where(i => i.ItemOrderStatus == 2 && i.Enabled == true).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
+                page = await _context.StockItems.Where(i => i.StoreId == 4 && i.Enabled == true).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
                 return Json(new { data = page.Items, totalcount = page.TotalItemCount });
             }
             catch (Exception ex) {
@@ -143,20 +143,20 @@ namespace TestGridSelectFile.Controllers
             ViewData.Add("SearchInfo", searchInfo);
             searchInfo.PageSize = searchInfo.Take == 0 ? 10 : searchInfo.Take;
             searchInfo.CurrentPageIndex = searchInfo.Skip == 0 ? 0 : (searchInfo.Skip / searchInfo.Take) + 1;
-            ResponseResult<OrderOrderItem>? page = new ResponseResult<OrderOrderItem>();
+            ResponseResult<StockItem>? page = new ResponseResult<StockItem>();
             if (ids != null && ids.Length > 0)
             {
                 foreach (var id in ids)
                 {
-                    var changedresult = _context.OrderOrderItems.Where(i => i.Id == id).FirstOrDefault();
+                    var changedresult = _context.StockItems.Where(i => i.Id == id).FirstOrDefault();
                     changedresult.Enabled = true;
-                    changedresult.ItemOrderStatus = 2;
-                    _context.OrderOrderItems.Attach(changedresult);
+                    changedresult.StoreId = 4;
+                    _context.StockItems.Attach(changedresult);
                     _context.SaveChanges();
                 }
 
             }
-            page = await _context.OrderOrderItems.Where(i => i.ItemOrderStatus == 0 && i.Enabled == false).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
+            page = await _context.StockItems.Where(i => i.StoreId == 1 && i.Enabled == false).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
             return Json(new { data = page.Items, totalcount = page.TotalItemCount });
         }
 
