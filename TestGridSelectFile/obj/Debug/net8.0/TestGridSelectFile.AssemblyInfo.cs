@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TestGridSelectFile")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a9bf45d2c70b9dcd320ae44a720c68671b54f57e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b26b699170c188f266ad99869204d22a9d4c8017")]
 [assembly: System.Reflection.AssemblyProductAttribute("TestGridSelectFile")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TestGridSelectFile")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

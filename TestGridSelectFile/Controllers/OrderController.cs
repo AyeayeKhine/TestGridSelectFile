@@ -76,18 +76,24 @@ namespace TestGridSelectFile.Controllers
                 searchInfo.PageSize = searchInfo.Take == 0 ? 10 : searchInfo.Take;
                 searchInfo.CurrentPageIndex = searchInfo.Skip == 0 ? 0 : (searchInfo.Skip / searchInfo.Take) + 1;
                 ResponseResult<StockItem>? page = new ResponseResult<StockItem>();
+                var refStore =await _context.ReferenceStores.Where(i => i.StoreId == 1).FirstOrDefaultAsync();
                 if (ids != null && ids.Length > 0)
                 {
                     foreach (var id in ids) {
-                        var changedresult = _context.StockItems.Where(i => i.Id == id).FirstOrDefault();
+                        var changedresult =await _context.StockItems.Where(i => i.Id == id).FirstOrDefaultAsync();
                         changedresult.Enabled = false;
-                        //changedresult.StoreId = 1;
+                        changedresult.StoreId = refStore.Id;
+                        changedresult.StoreCode = refStore.StoreCode;
+                        changedresult.StoreDescription = refStore.StoreDescription;
                         _context.StockItems.Attach(changedresult);
                         _context.SaveChanges();
                     }
                     
                 }
-                page = await _context.StockItems.Where(i =>i.Enabled == true).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
+                page = await (from st in _context.StockItems
+                            join refst in _context.ReferenceStores on st.StoreId equals refst.Id
+                            where (st.Enabled == true && refst.StoreId == 4)
+                            select st).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
                 return Json(new { data = page.Items, totalcount = page.TotalItemCount });
             }
             catch (Exception ex) {
@@ -146,19 +152,25 @@ namespace TestGridSelectFile.Controllers
                 searchInfo.PageSize = searchInfo.Take == 0 ? 10 : searchInfo.Take;
                 searchInfo.CurrentPageIndex = searchInfo.Skip == 0 ? 0 : (searchInfo.Skip / searchInfo.Take) + 1;
                 ResponseResult<StockItem>? page = new ResponseResult<StockItem>();
+                var refStore = await _context.ReferenceStores.Where(i => i.StoreId == 4).FirstOrDefaultAsync();
                 if (ids != null && ids.Length > 0)
                 {
                     foreach (var id in ids)
                     {
-                        var changedresult = _context.StockItems.Where(i => i.Id == id).FirstOrDefault();
+                        var changedresult =await _context.StockItems.Where(i => i.Id == id).FirstOrDefaultAsync();
                         changedresult.Enabled = true;
-                        //changedresult.StoreId = 4;
+                        changedresult.StoreId = refStore.Id;
+                        changedresult.StoreCode = refStore.StoreCode;
+                        changedresult.StoreDescription = refStore.StoreDescription;
                         _context.StockItems.Attach(changedresult);
                         _context.SaveChanges();
                     }
 
                 }
-                page = await _context.StockItems.Where(i => i.Enabled == false).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
+                page = await (from st in _context.StockItems
+                              join refst in _context.ReferenceStores on st.StoreId equals refst.Id
+                              where (st.Enabled == false && refst.StoreId == 1)
+                              select st).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
                 return Json(new { data = page.Items, totalcount = page.TotalItemCount });
             }
             catch (Exception ex) 
