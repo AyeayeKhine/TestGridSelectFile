@@ -20,6 +20,7 @@ public partial class StockItem
     public Guid? ItemCategoryId { get; set; }
 
     public DateOnly? RegDate { get; set; }
+    public string RegDateString { get { return RegDate == null ? "" : RegDate.Value.ToString("dd-MMM-yyyy "); } }
 
     public string? OtherDescription { get; set; }
 
@@ -51,7 +52,9 @@ public partial class StockItem
     /// </summary>
     public DateOnly? TransactionDate { get; set; }
 
-    public long? StoreId { get; set; }
+    public string TransactionDateString { get { return TransactionDate == null ? "" : TransactionDate.Value.ToString("dd-MMM-yyyy "); } }
+
+    public Guid? StoreId { get; set; }
 
     public bool Active { get; set; }
 

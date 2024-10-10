@@ -153,52 +153,43 @@
                     }
                 },
                 {
-                    dataField: "orderCode", caption: "OrderCode", headerFilter: false
-                }
-                ,
+                    dataField: "subCategoryCode", caption: "SubCategoryCode", headerFilter: false
+                },
                 {
-                    dataField: "orderID", caption: "Order", hidingPriority: 36,
-                    calculateDisplayValue: "OrderDescription",
+                    dataField: "subCategoryID", caption: "SubCategoryDescription", hidingPriority: 36,
+                    calculateDisplayValue: "SubCategoryDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
-                        dataSource: GetDataSource("/Order/OrderDropdown", null, null),
+                        dataSource: GetDataSource("/Order/SubCategoryDropdown", null, null),
                     }
                 },
                 {
-                    dataField: "itemOrderStatus", caption: "ItemOrderStatus", allowSearch: false,
-                    lookup: {
-                        valueExpr: "Value",
-                        displayExpr: "Text",
-                        dataSource: GetItemOrderStatusList()
-                    }
+                    dataField: "itemCategoryCode", caption: "ItemCategoryCode", headerFilter: false
                 },
                 {
-                    dataField: "itemName", caption: "ItemName", headerFilter: false
-                },
-                {
-                    dataField: "smithCode", caption: "SmithCode", headerFilter: false
-                }
-                ,
-                {
-                    dataField: "smithID", caption: "Smith", hidingPriority: 36,
-                    calculateDisplayValue: "SmithDescription",
+                    dataField: "itemCategoryID", caption: "ItemCategoryDescription", hidingPriority: 36,
+                    calculateDisplayValue: "ItemCategoryDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
-                        dataSource: GetDataSource("/Order/SmithDropdown", null, null),
+                        dataSource: GetDataSource("/Order/ReferenceItemCategoriesDropdown", null, null),
                     }
                 },
-                
                 {
-                    dataField: "quantity", caption: "Quantity", headerFilter: false
+                    dataField: "regDate", caption: "Registered Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
+                    cellTemplate: function (container, options) {
+                        container.text(options.data.RegDateString);
+                    }
                 },
+               
+                {
+                    dataField: "otherDescription", caption: "OtherDescription", headerFilter: false
+                }
+                ,
                 {
                     dataField: "quality", caption: "Quality", headerFilter: false
-                },
-
-                { dataField: "goldPrice", caption: "GoldPrice", headerFilter: false, allowSearch: false },
-                {
+                }, {
                     dataField: "itemWeightKPY", caption: "ItemWeightKPY", headerFilter: false
                 },
                 {
@@ -212,22 +203,44 @@
                 {
                     dataField: "totalGoldWeightKPY", caption: "TotalGoldWeightKPY", headerFilter: false
                 },
-
-
                 { dataField: "jewelCost", caption: "JewelCost", headerFilter: false, allowSearch: false },
                 {
-                    dataField: "smithCost", caption: "SmithCost", headerFilter: false
+                    dataField: "smithCode", caption: "SmithCode", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "smithID", caption: "Smith", hidingPriority: 36,
+                    calculateDisplayValue: "SmithDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Order/SmithDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "smithWasteKPY", caption: "SmithWasteKPY", headerFilter: false
                 },
 
-                { dataField: "otherCost", caption: "OtherCost", headerFilter: false, allowSearch: false },
+                { dataField: "itemStatus", caption: "ItemStatus", headerFilter: false, allowSearch: false },
                 {
-                    dataField: "customerPayGoldWeightKPY", caption: "CustomerPayGoldWeightKPY", headerFilter: false
+                    dataField: "transactionDate", caption: "Transaction Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
+                    cellTemplate: function (container, options) {
+                        container.text(options.data.TransactionDateString);
+                    }
                 },
                 {
-                    dataField: "customerPayGoldPrice", caption: "CustomerPayGoldPrice", headerFilter: false
+                    dataField: "StoreCode", caption: "StoreCode", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "storeID", caption: "Store", hidingPriority: 36,
+                    calculateDisplayValue: "StoreDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Order/ReferenceStoresDropdown", null, null),
+                    }
                 },
-
-                { dataField: "total", caption: "Total", headerFilter: false, allowSearch: false },
                 {
                     dataField: "active", caption: "Active", headerFilter: false
                 },
@@ -279,49 +292,12 @@
             columns: [
 
                 { dataField: "iD", caption: "ID", headerFilter: false, sortIndex: 0, sortOrder: "desc", visible: false },
-                { dataField: "orderItemID", caption: "OrderItemID", headerFilter: false, sortOrder: "desc", visible: false },
+                { dataField: "itemID", caption: "ItemID", headerFilter: false, sortOrder: "desc", visible: false },
 
-                { dataField: "orderItemCode", caption: "OrderItemCode", headerFilter: false, sortOrder: "desc" },
+                { dataField: "itemCode", caption: "ItemCode", headerFilter: false, sortOrder: "desc" },
 
                 {
-                    dataField: "orderItemDescription", caption: "OrderItemDescription", headerFilter: false
-                },
-                {
-                    dataField: "orderCode", caption: "OrderCode", headerFilter: false
-                }
-                ,
-                {
-                    dataField: "orderID", caption: "Order", hidingPriority: 36,
-                    calculateDisplayValue: "OrderDescription",
-                    lookup: {
-                        valueExpr: "id",
-                        displayExpr: "description",
-                        dataSource: GetDataSource("/Order/OrderDropdown", null, null),
-                    }
-                },
-                {
-                    dataField: "itemOrderStatus", caption: "ItemOrderStatus", allowSearch: false,
-                    lookup: {
-                        valueExpr: "Value",
-                        displayExpr: "Text",
-                        dataSource: GetItemOrderStatusList()
-                    }
-                },
-                {
-                    dataField: "itemName", caption: "ItemName", headerFilter: false
-                },
-                {
-                    dataField: "smithCode", caption: "SmithCode", headerFilter: false
-                }
-                ,
-                {
-                    dataField: "smithID", caption: "Smith", hidingPriority: 36,
-                    calculateDisplayValue: "SmithDescription",
-                    lookup: {
-                        valueExpr: "id",
-                        displayExpr: "description",
-                        dataSource: GetDataSource("/Order/SmithDropdown", null, null),
-                    }
+                    dataField: "itemDescription", caption: "ItemDescription", headerFilter: false
                 },
                 {
                     dataField: "categoryCode", caption: "CategoryCode", headerFilter: false
@@ -336,14 +312,43 @@
                     }
                 },
                 {
-                    dataField: "quantity", caption: "Quantity", headerFilter: false
+                    dataField: "subCategoryCode", caption: "SubCategoryCode", headerFilter: false
                 },
                 {
-                    dataField: "quality", caption: "Quality", headerFilter: false
+                    dataField: "subCategoryID", caption: "SubCategoryDescription", hidingPriority: 36,
+                    calculateDisplayValue: "SubCategoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Order/SubCategoryDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "itemCategoryCode", caption: "ItemCategoryCode", headerFilter: false
+                },
+                {
+                    dataField: "itemCategoryID", caption: "ItemCategoryDescription", hidingPriority: 36,
+                    calculateDisplayValue: "ItemCategoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Order/ReferenceItemCategoriesDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "regDate", caption: "Registered Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
+                    cellTemplate: function (container, options) {
+                        container.text(options.data.RegDateString);
+                    }
                 },
 
-                { dataField: "goldPrice", caption: "GoldPrice", headerFilter: false, allowSearch: false },
                 {
+                    dataField: "otherDescription", caption: "OtherDescription", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "quality", caption: "Quality", headerFilter: false
+                }, {
                     dataField: "itemWeightKPY", caption: "ItemWeightKPY", headerFilter: false
                 },
                 {
@@ -357,22 +362,44 @@
                 {
                     dataField: "totalGoldWeightKPY", caption: "TotalGoldWeightKPY", headerFilter: false
                 },
-
-
                 { dataField: "jewelCost", caption: "JewelCost", headerFilter: false, allowSearch: false },
                 {
-                    dataField: "smithCost", caption: "SmithCost", headerFilter: false
+                    dataField: "smithCode", caption: "SmithCode", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "smithID", caption: "Smith", hidingPriority: 36,
+                    calculateDisplayValue: "SmithDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Order/SmithDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "smithWasteKPY", caption: "SmithWasteKPY", headerFilter: false
                 },
 
-                { dataField: "otherCost", caption: "OtherCost", headerFilter: false, allowSearch: false },
+                { dataField: "itemStatus", caption: "ItemStatus", headerFilter: false, allowSearch: false },
                 {
-                    dataField: "customerPayGoldWeightKPY", caption: "CustomerPayGoldWeightKPY", headerFilter: false
+                    dataField: "transactionDate", caption: "Transaction Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
+                    cellTemplate: function (container, options) {
+                        container.text(options.data.TransactionDateString);
+                    }
                 },
                 {
-                    dataField: "customerPayGoldPrice", caption: "CustomerPayGoldPrice", headerFilter: false
+                    dataField: "StoreCode", caption: "StoreCode", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "storeID", caption: "Store", hidingPriority: 36,
+                    calculateDisplayValue: "StoreDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Order/ReferenceStoresDropdown", null, null),
+                    }
                 },
-
-                { dataField: "total", caption: "Total", headerFilter: false, allowSearch: false },
                 {
                     dataField: "active", caption: "Active", headerFilter: false
                 },
