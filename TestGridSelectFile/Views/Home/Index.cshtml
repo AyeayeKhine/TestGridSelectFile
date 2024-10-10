@@ -1,8 +1,855 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    //Layout = ViewBag.Layout;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">@ViewBag.Title</h4>
+                <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                        <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                    </ul>
+                </div>
+                <h6 class="card-subtitle mt-1 font-weight-bold" id="SubTitle"></h6>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <!-- Basic tabs start -->
+                    <section id="basic-tabs-components">
+                        <div class="row match-height">
+                            <div class="col-xl-12 col-lg-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" role="tab" aria-selected="true">In hand</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="base-tab2" data-toggle="tab" aria-controls="tab2" href="#tab2" role="tab" aria-selected="false">SafeBox</a>
+                                                </li>
+
+                                            </ul>
+                                            <div class="tab-content px-1 pt-1">
+                                                <div class="tab-pane active" id="tab1" role="tabpanel" aria-labelledby="base-tab1">
+                                                    <div id="InHandStoreGrid" class="ui-grid" data-url="@ViewBag.Url" data-parentpropertyname="@ViewBag.ParentPropertyName" data-parentid="@ViewBag.ParentID" data-customstatestore="false"></div>
+                                                </div>
+                                                <div class="tab-pane" id="tab2" role="tabpanel" aria-labelledby="base-tab2">
+                                                    <div id="SafeBoxStoreGrid" class="ui-grid" data-url="@ViewBag.Url" data-parentpropertyname="@ViewBag.ParentPropertyName" data-parentid="@ViewBag.ParentID" data-customstatestore="false"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Tag Input end -->
+
+                </div><!--/card body-->
+            </div><!--/card content-->
+        </div><!--/card-->
+    </div>
 </div>
+
+<script>
+    var self = this,
+        datagrid = null,
+        gridID = "#InHandStoreGrid",
+        datagridSafeBox = null,
+        gridIDbySafeBox = "#SafeBoxStoreGrid",
+        loadOptions = {
+            key: "id",
+            baseURL: "/Home/GetByCustomFilter"
+        },
+        componentIdbySafeBox = "#SafeBoxStoreGrid",
+        loadOptionsbySafeBox = {
+            key: "id",
+            baseURL: "/Home/GetBySafeBoxOrder"
+        },
+        componentId = "#InHandStoreGrid",
+        gridOption = {};
+    gridOptionbySafeBox = {};
+
+    $(document).ready(function () {
+
+        gridOption = GetGridOption();
+
+        gridOptionbySafeBox = GetGridOptionSafeBox();
+
+        if ($(componentId).data('parentid')) {
+            loadOptions = {
+                key: "id",
+                baseURL: $(componentId).data('url')
+            };
+            if ($(componentId).data('parentpropertyname')) {
+                loadOptions.baseURL = loadOptions.baseURL + '?' + $(componentId).data('parentpropertyname') + '=' + $(componentId).data('parentid');
+            }
+        } else if ($(componentId).data('url')) {
+            loadOptions = {
+                key: "id",
+                baseURL: $(componentId).data('url')
+            };
+        }
+
+        initGrid(gridOption, componentId, function (grid) {
+            datagrid = grid;
+            grid.load(loadOptions);
+        });
+
+        if ($(componentIdbySafeBox).data('parentid')) {
+            loadOptions = {
+                key: "id",
+                baseURL: $(componentIdbySafeBox).data('url')
+            };
+            if ($(componentIdbySafeBox).data('parentpropertyname')) {
+                loadOptions.baseURL = loadOptions.baseURL + '?' + $(componentIdbySafeBox).data('parentpropertyname') + '=' + $(componentIdbySafeBox).data('parentid');
+            }
+        } else if ($(componentIdbySafeBox).data('url')) {
+            loadOptions = {
+                key: "id",
+                baseURL: $(componentIdbySafeBox).data('url')
+            };
+        }
+
+        initGrid(gridOptionbySafeBox, componentIdbySafeBox, function (grid) {
+            datagridSafeBox = grid;
+            grid.load(loadOptionsbySafeBox);
+        });
+    });
+
+    function GetGridOption() {
+        return {
+            selection: {
+                mode: "multiple"
+            },
+            columns: [
+
+                { dataField: "iD", caption: "ID", headerFilter: false, sortIndex: 0, sortOrder: "desc", visible: false },
+                { dataField: "itemID", caption: "ItemID", headerFilter: false, sortOrder: "desc", visible: false },
+
+                { dataField: "itemCode", caption: "ItemCode", headerFilter: false, sortOrder: "desc" },
+
+                {
+                    dataField: "itemDescription", caption: "ItemDescription", headerFilter: false
+                },
+                {
+                    dataField: "categoryCode", caption: "CategoryCode", headerFilter: false
+                },
+                {
+                    dataField: "categoryID", caption: "Category",
+                    calculateDisplayValue: "categoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/CategoryDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "subCategoryCode", caption: "SubCategoryCode", headerFilter: false
+                },
+                {
+                    dataField: "subCategoryID", caption: "SubCategoryDescription",
+                    calculateDisplayValue: "SubCategoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/SubCategoryDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "itemCategoryCode", caption: "ItemCategoryCode", headerFilter: false
+                },
+                {
+                    dataField: "itemCategoryID", caption: "ItemCategoryDescription",
+                    calculateDisplayValue: "itemCategoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/ReferenceItemCategoriesDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "regDate", caption: "Registered Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
+                    cellTemplate: function (container, options) {
+                        container.text(options.data.regDateString);
+                    }
+                },
+
+                {
+                    dataField: "otherDescription", caption: "OtherDescription", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "quality", caption: "Quality", headerFilter: false
+                }, {
+                    dataField: "itemWeightKPY", caption: "ItemWeightKPY", headerFilter: false, dataType: 'float',
+                },
+                {
+                    dataField: "jewelWeightKPY", caption: "JewelWeightKPY", headerFilter: false
+                },
+
+                { dataField: "goldWeightKPY", caption: "GoldWeightKPY", headerFilter: false, allowSearch: false },
+                {
+                    dataField: "wasteKPY", caption: "WasteKPY", headerFilter: false
+                },
+                {
+                    dataField: "totalGoldWeightKPY", caption: "TotalGoldWeightKPY", headerFilter: false
+                },
+                { dataField: "jewelCost", caption: "JewelCost", headerFilter: false, allowSearch: false },
+                {
+                    dataField: "smithCode", caption: "SmithCode", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "smithID", caption: "Smith",
+                    calculateDisplayValue: "smithDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/SmithDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "smithWasteKPY", caption: "SmithWasteKPY", headerFilter: false
+                },
+
+                { dataField: "itemStatus", caption: "ItemStatus", headerFilter: false, allowSearch: false },
+                {
+                    dataField: "transactionDate", caption: "Transaction Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
+                    cellTemplate: function (container, options) {
+                        container.text(options.data.transactionDateString);
+                    }
+                },
+                {
+                    dataField: "storeCode", caption: "StoreCode", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "storeID", caption: "Store",
+                    calculateDisplayValue: "storeDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/ReferenceStoresDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "active", caption: "Active", headerFilter: false
+                },
+                {
+                    dataField: "enabled", caption: "Enabled", headerFilter: false
+                },
+            ],
+            onRowDblClick: function (e) {
+                if (e.rowType === "data") {
+                    // if (accessRight.Detail) {
+                    //     window.location.href = '/Population/HouseHoldMember/Detail?id=' + e.key;
+                    // }
+                }
+            },
+            toolbar: {
+                items: [
+                    "columnChooserButton", "searchPanel",
+                    {
+                        location: "before",
+                        widget: "dxButton",
+                        widgetId: "select",
+                        locateInMenu: "auto",
+                        options: {
+                            stylingMode: "contained",
+                            type: 'default',
+                            text: "Change SafeBox",
+                            // visible: accessRight.Create,
+                            icon: "fa fa-plus",
+                            onClick: function (e) {
+                                var dataGrid = $(gridID).dxDataGrid("instance");
+                                var selectedFormData = dataGrid.getSelectedRowsData();
+                                selectData(selectedFormData);
+                            }
+                        },
+                        OnButtonInitialized: function (e) {
+                            //e.element.addClass("btn btn-primary");
+                        }
+                    },
+                ]
+            }
+        }
+    };
+
+    function GetGridOptionSafeBox() {
+        return {
+            selection: {
+                mode: "multiple"
+            },
+            columns: [
+
+                { dataField: "iD", caption: "ID", headerFilter: false, sortIndex: 0, sortOrder: "desc", visible: false },
+                { dataField: "itemID", caption: "ItemID", headerFilter: false, sortOrder: "desc", visible: false },
+
+                { dataField: "itemCode", caption: "ItemCode", headerFilter: false, sortOrder: "desc" },
+
+                {
+                    dataField: "itemDescription", caption: "ItemDescription", headerFilter: false
+                },
+                {
+                    dataField: "categoryCode", caption: "CategoryCode", headerFilter: false
+                },
+                {
+                    dataField: "categoryID", caption: "Category",
+                    calculateDisplayValue: "categoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/CategoryDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "subCategoryCode", caption: "SubCategoryCode", headerFilter: false
+                },
+                {
+                    dataField: "subCategoryID", caption: "SubCategoryDescription",
+                    calculateDisplayValue: "subCategoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/SubCategoryDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "itemCategoryCode", caption: "ItemCategoryCode", headerFilter: false
+                },
+                {
+                    dataField: "itemCategoryID", caption: "ItemCategoryDescription",
+                    calculateDisplayValue: "itemCategoryDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/ReferenceItemCategoriesDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "regDate", caption: "Registered Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
+                    cellTemplate: function (container, options) {
+                        container.text(options.data.regDateString);
+                    }
+                },
+
+                {
+                    dataField: "otherDescription", caption: "OtherDescription", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "quality", caption: "Quality", headerFilter: false
+                }, {
+                    dataField: "itemWeightKPY", caption: "ItemWeightKPY", headerFilter: false
+                },
+                {
+                    dataField: "jewelWeightKPY", caption: "JewelWeightKPY", headerFilter: false
+                },
+
+                { dataField: "goldWeightKPY", caption: "GoldWeightKPY", headerFilter: false, allowSearch: false },
+                {
+                    dataField: "wasteKPY", caption: "WasteKPY", headerFilter: false
+                },
+                {
+                    dataField: "totalGoldWeightKPY", caption: "TotalGoldWeightKPY", headerFilter: false
+                },
+                { dataField: "jewelCost", caption: "JewelCost", headerFilter: false, allowSearch: false },
+                {
+                    dataField: "smithCode", caption: "SmithCode", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "smithID", caption: "Smith",
+                    calculateDisplayValue: "smithDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/SmithDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "smithWasteKPY", caption: "SmithWasteKPY", headerFilter: false
+                },
+
+                { dataField: "itemStatus", caption: "ItemStatus", headerFilter: false, allowSearch: false },
+                {
+                    dataField: "transactionDate", caption: "Transaction Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
+                    cellTemplate: function (container, options) {
+                        container.text(options.data.transactionDateString);
+                    }
+                },
+                {
+                    dataField: "storeCode", caption: "StoreCode", headerFilter: false
+                }
+                ,
+                {
+                    dataField: "storeID", caption: "Store",
+                    calculateDisplayValue: "storeDescription",
+                    lookup: {
+                        valueExpr: "id",
+                        displayExpr: "description",
+                        dataSource: GetDataSource("/Home/ReferenceStoresDropdown", null, null),
+                    }
+                },
+                {
+                    dataField: "active", caption: "Active", headerFilter: false
+                },
+                {
+                    dataField: "enabled", caption: "Enabled", headerFilter: false
+                },
+            ],
+            onRowDblClick: function (e) {
+                if (e.rowType === "data") {
+                    // if (accessRight.Detail) {
+                    //     window.location.href = '/Population/HouseHoldMember/Detail?id=' + e.key;
+                    // }
+                }
+            },
+            toolbar: {
+                items: [
+                    "columnChooserButton", "searchPanel",
+                    {
+                        location: "before",
+                        widget: "dxButton",
+                        widgetId: "select",
+                        locateInMenu: "auto",
+                        options: {
+                            stylingMode: "contained",
+                            type: 'default',
+                            text: "Change In Hand",
+                            // visible: accessRight.Create,
+                            icon: "fa fa-plus",
+                            onClick: function (e) {
+                                var dataGrid = $(gridIDbySafeBox).dxDataGrid("instance");
+                                var selectedFormData = dataGrid.getSelectedRowsData();
+                                selectDataSafeBox(selectedFormData);
+                            }
+                        },
+                        OnButtonInitialized: function (e) {
+                            //e.element.addClass("btn btn-primary");
+                        }
+                    },
+                ]
+            }
+        }
+    };
+
+    function initGrid(options, gridId, callback) {
+        var elementContainer = $(gridId);
+        var storageKey = gridId.replace('Grid', '').replace('#', '');
+        // var stateStore = MRCS.Functions.isNotEmpty(elementContainer.data("customstatestore")) ? elementContainer.data("customstatestore") : true;
+        var stateStore = false;
+        var dataGridOptions = {
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                savingTimeout: 2000,
+                ignoreColumnOptionNames: [],
+                customSave: function (state) {
+                    //console.log(state);
+                    // if (stateStore === true) {
+                    //     MRCS.Functions.SaveGridState(storageKey, state);
+                    // }
+
+                }
+            },
+        };
+
+        $.extend(dataGridOptions, options);
+
+        var dataGrid = GetDataGridControl(dataGridOptions, elementContainer);
+
+        if (stateStore === true) {
+            MRCS.Functions.GetGridState(storageKey, function (result) {
+
+                if (result !== '') {
+
+                    var state = JSON.parse(result);
+                    state.searchText = null;
+                    for (var i = 0; i < state.columns.length; i++) {
+                        state.columns[i].filterValue = null;
+                    }
+                    if (stateStore === true) {
+                        dataGrid.instance.state(state);
+                    }
+                }
+
+                if (typeof callback === "function") {
+                    // Call it, since we have confirmed it is callable
+                    callback(dataGrid);
+                }
+                return dataGrid;
+            });
+        } else {
+            if (typeof callback === "function") {
+                // Call it, since we have confirmed it is callable
+                callback(dataGrid);
+            }
+            return dataGrid;
+        }
+    };
+
+    function GetDataGridControl(options, element) {
+        var elementContainer = $(element);
+        var defaultOptions = this.GetDataGridOptions();
+
+        if (!defaultOptions) return;
+
+        $.extend(defaultOptions, options);
+        elementContainer.dxDataGrid(defaultOptions);
+        var widget = elementContainer.data("dxDataGrid");
+
+        return {
+            instance: widget,
+            load: function (baseOptions, data, callback) {
+                var timeOut = null,
+                    updateTasks = [];
+                var timerCallback = function () {
+                    //Send data to your REST service from updateTasks
+                    $.each(updateTasks, function (index, task) {
+                        task.deferred.resolve();
+                    });
+                    updateTasks = [];
+                    timeOut = null;
+                };
+                var gridDataSource = new DevExpress.data.CustomStore({
+                    key: baseOptions.key,
+                    load: function (loadOptions) {
+                        var d = $.Deferred(),
+                            params = {};
+                        [
+                            "skip",
+                            "take",
+                            "requireTotalCount",
+                            "requireGroupCount",
+                            "sort",
+                            "filter",
+                            "totalSummary",
+                            "group",
+                            "groupSummary"
+                        ].forEach(function (i) {
+                            // if (i in loadOptions && MRCS.Functions.isNotEmpty(loadOptions[i]))
+                            if (i in loadOptions)
+                                params[i] = JSON.stringify(loadOptions[i]);
+                        });
+                        $.extend(params, data);
+                        loadData(baseOptions.baseURL, "json", "Post", "application/x-www-form-urlencoded", params, null, elementContainer)
+                            .then(function (result) {
+                                $(elementContainer).closest('.card-body').unblock();
+                                if (result.data) {
+                                    d.resolve(result.data, {
+                                        totalCount: result.totalcount
+                                    });
+                                } else if (result) {
+                                    d.resolve(result);
+                                }
+                                if (typeof callback === "function") {
+                                    // Call it, since we have confirmed it is callable
+                                    callback(result);
+                                }
+                            }).catch(function (error) {
+                                console.log(error);
+                                $(elementContainer).closest('.card-body').unblock();
+                                //MRCS.SharedWidgets.ShowError(error);
+                            });
+                        return d.promise();
+                    },
+                    update: function (key, values) {
+                        //debugger;
+                        if (!timeOut) {
+                            timeOut = setTimeout(timerCallback, 100);
+                        }
+                        var d = new $.Deferred();
+                        updateTasks.push({
+                            key: key,
+                            values: values,
+                            deferred: d
+                        });
+                        return d.promise();
+                    }
+                });
+
+                widget.option("dataSource", gridDataSource);
+
+            }
+        };
+    };
+
+    function GetDataGridOptions() {
+        var defaultOptions = {
+            columnHidingEnabled: false,
+            columnAutoWidth: true,
+            //remoteOperations: { paging: true, filtering: true, sorting: true, grouping: false, summary: false, groupPaging: false },
+            remoteOperations: true,
+            pager: { showPageSizeSelector: true, allowedPageSizes: [10, 15, 20, 50, 80, 100], showInfo: true, visible: true },
+            paging: { pageSize: 10 },
+            allowColumnResizing: true,
+            allowColumnReordering: true,
+            columnChooser: {
+                mode: "select",
+                enabled: true
+            },
+            filterRow: {
+                visible: true,
+                applyFilter: "auto"
+            },
+            headerFilter: {
+                //allowSearch: true,
+                //searchMode: "startswith",
+                visible: false
+            },
+
+            selection: { mode: "multiple", allowSelectAll: false, selectAllMode: "allPages", showCheckBoxesMode: "always" },
+            sorting: { mode: "multiple" },
+            searchPanel: { width: 350.0, visible: true, highlightSearchText: true, highlightCaseSensitive: false, searchVisibleColumnsOnly: true },
+            showColumnLines: true, showRowLines: true, showBorders: true,
+            visible: true,
+            loadPanel: { enabled: false },
+            rowAlternationEnabled: true,
+            groupPanel: {
+                visible: false,
+                emptyPanelText: 'Drag a column to group'
+            },
+            onEditorPreparing: function (e) {
+                if (e.parentType === "searchPanel") {
+                    e.editorOptions.onValueChanged = function (args) {
+                        if (isNotEmpty(args.event) && args.event.type === "dxclick") {
+                            e.component.searchByText("");
+                        }
+                    };
+                    e.editorOptions.onEnterKey = function (arg) {
+                        e.component.searchByText(arg.component.option("value"));
+                    };
+                }
+            }
+
+        };
+        return defaultOptions;
+    };
+
+    function isNotEmpty(value) {
+        return value !== undefined && value !== null && value !== "";
+    };
+
+    function loadData(url, dataType, method, contentType, data, processData, loadingEl) {
+        var deferred = new $.Deferred;
+        var requestSettings = {
+            url: url,
+            method: method,
+            dataType: dataType,
+            contentType: false,
+            beforeSend: function (method, ajaxOptions) {
+                ajaxOptions.xhrFields = { withCredentials: true };
+                if (loadingEl) {
+                    beginCustomLoading($(loadingEl));
+                }
+            },
+            success: function (data) {
+
+                endCustomLoading($(loadingEl));
+                deferred.resolve(data);
+            },
+            error: function (xhr, textStatus, error) {
+
+                var responseText = "";
+                try {
+                    responseText = jQuery.parseJSON(xhr.responseText);
+                    responseText = responseText.detail;
+                    //$("#dialog").append("<div><b>" + errorType + " " + exception + "</b></div>");
+                    //$("#dialog").append("<div><u>Exception</u>:<br /><br />" + responseText.ExceptionType + "</div>");
+                    //$("#dialog").append("<div><u>StackTrace</u>:<br /><br />" + responseText.StackTrace + "</div>");
+                    //$("#dialog").append("<div><u>Message</u>:<br /><br />" + responseText.Message + "</div>");
+                } catch (e) {
+                    responseText = xhr.responseText;
+                }
+                console.log(responseText);
+                var message = "";
+                var statusErrorMap = {
+                    '400': "Server understood the request, but request content was invalid.",
+                    '401': "Unauthorized access.",
+                    '403': "Forbidden resource can't be accessed.",
+                    '404': "Not found",
+                    '500': "Internal server error.",
+                    '503': "Service unavailable."
+                };
+                if (xhr.status === '401' || xhr.status === 401) {
+                    {
+                        window.location.href = '/Error/UnAuthorized?returnUrl=' + window.location.href.replace(window.location.origin, '');
+                    }
+                    message = statusErrorMap[xhr.status];
+                    if (!message) {
+                        message = "Unknown Error.\n";
+                    }
+                }
+                else if (error === 'parsererror') {
+                    message = "Error.\nParsing JSON Request failed.\n";
+                } else if (error === 'timeout') {
+                    message = "Request Time out.\n";
+                } else if (error === 'abort') {
+                    message = "Request was aborted by the server.\n";
+                } else if (!responseText) {
+                    responseText = error;
+                }
+                else if (error !== null || error !== undefined) {
+                    message = error;
+                }
+                else {
+                    message = "Unknown Error\n.";
+                }
+
+                endCustomLoading($(loadingEl));
+                var errmsg = message + "\n\n" + responseText;
+                //MRCS.SharedWidgets.ShowError(errmsg);
+                deferred.reject(errmsg);
+            }
+        };
+        if (contentType) {
+            requestSettings.contentType = contentType;
+        }
+        if (data) {
+            requestSettings.data = data;
+        }
+        if (processData !== null && processData !== undefined) {
+            requestSettings.processData = processData;
+        }
+        $.ajax(requestSettings);
+        return deferred.promise();
+    };
+
+    function ShowError(error) {
+        // (string | mandatory) the text inside the notification
+        self.initNotify({
+            title: 'Error !!!',
+            // (string | mandatory) the text inside the notification
+            text: error,
+            // (int | optional) the time you want it to be alive for before fading out
+            time: '',
+            // (string) specify font-face icon  class for close message
+            close_icon: 'l-arrows-remove s16',
+            // (string) specify font-face icon class for big icon in left. if are specify image this will not show up.
+            icon: 'glyphicon glyphicon-user',
+            // (string | optional) the class name you want to apply to that specific message
+            class_name: 'error-notice'
+        });
+    };
+
+    function beginCustomLoading(loadingElement) {
+        var loadingContainer = loadingElement.closest('.card-body');
+        loadingContainer.block({
+            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            showOverlay: true,
+            centerY: true,
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                cursor: 'wait'
+            },
+            css: {
+                border: 0,
+                padding: 0,
+                backgroundColor: 'transparent'
+            }
+        });
+    };
+
+    function endCustomLoading(loadingElement) {
+        loadingElement.closest('.card-body').unblock();
+    };
+
+    function selectData(selectedMemberList) {
+        var MemberIdList = null;
+        if (selectedMemberList.length > 0) {
+            MemberIdList = selectedMemberList[0].id;
+        }
+        for (var i = 1; i < selectedMemberList.length; i++) {
+
+            MemberIdList += "," + selectedMemberList[i].id;
+        }
+        var params = {
+            filter: '["ID", "=", "' + MemberIdList + '"]'
+        };
+        var url = "/Home/ChangeSafeBox";
+        loadData(url, "json", "POST", "application/x-www-form-urlencoded", params)
+            .then(function (result) {
+                $(gridIDbySafeBox).dxDataGrid("instance").refresh();
+                $(gridID).dxDataGrid("instance").refresh();
+            });
+    }
+
+    function selectDataSafeBox(selectedMemberList) {
+        var MemberIdList = null;
+        if (selectedMemberList.length > 0) {
+            MemberIdList = selectedMemberList[0].id;
+        }
+        for (var i = 1; i < selectedMemberList.length; i++) {
+
+            MemberIdList += "," + selectedMemberList[i].id;
+        }
+        var params = {
+            filter: '["ID", "=", "' + MemberIdList + '"]'
+        };
+        var url = "/Home/ChangeInHand";
+        loadData(url, "json", "POST", "application/x-www-form-urlencoded", params)
+            .then(function (result) {
+                $(gridIDbySafeBox).dxDataGrid("instance").refresh();
+                $(gridID).dxDataGrid("instance").refresh();
+            });
+        
+    }
+
+    function GetDataSource(url, parentPropoertyName, parentID, extrafilter) {
+        if (isNotEmpty(parentID) && (parentID)) {
+            var url = url + "ByFilter?SelectedTextProperty=" + parentPropoertyName + "&ParentID=" + parentID + (isNotEmpty(extrafilter) ? extrafilter : "");
+        } else if (isNotEmpty(extrafilter)) {
+            var url = url + "ByFilter?" + extrafilter;
+        }
+
+        var dataSource = new DevExpress.data.CustomStore({
+            loadMode: 'raw',
+            cacheRawData: false,
+            key: 'id',
+            load: function (loadOptions) {
+                var d = $.Deferred(),
+                    params = { prefix: loadOptions.searchValue };
+
+                loadData(url, "json", "GET", "application/x-www-form-urlencoded", params)
+                    .then(function (result) {
+                        d.resolve(result.data == "" ? result.data : result.data.value);
+
+                    });
+                return d.promise();
+            },
+            byKey: function (key) {
+                var d = $.Deferred(),
+                    params = { prefix: key };
+                loadData(url, "json", "GET", "application/x-www-form-urlencoded", params)
+                    .then(function (result) {
+                        d.resolve(result.data == "" ? result.data : result.data.value);
+                    });
+                return d.promise();
+            }
+
+        });
+        return dataSource;
+    };
+
+    function GetItemOrderStatusList() {
+        var GetItemOrderStatusList = [
+
+            { Value: "0", Text: "SafeBox" },
+            { Value: "1", Text: "Store" },
+            { Value: "2", Text: "In hand" }
+        ];
+        return GetItemOrderStatusList;
+    };
+
+</script>

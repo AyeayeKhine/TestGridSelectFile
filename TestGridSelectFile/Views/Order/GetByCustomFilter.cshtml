@@ -145,7 +145,7 @@
                 },
                 {
                     dataField: "categoryID", caption: "Category",
-                    calculateDisplayValue: "CategoryDescription",
+                    calculateDisplayValue: "categoryDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
@@ -169,7 +169,7 @@
                 },
                 {
                     dataField: "itemCategoryID", caption: "ItemCategoryDescription",
-                    calculateDisplayValue: "ItemCategoryDescription",
+                    calculateDisplayValue: "itemCategoryDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
@@ -179,7 +179,7 @@
                 {
                     dataField: "regDate", caption: "Registered Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
                     cellTemplate: function (container, options) {
-                        container.text(options.data.RegDateString);
+                        container.text(options.data.regDateString);
                     }
                 },
                
@@ -190,7 +190,7 @@
                 {
                     dataField: "quality", caption: "Quality", headerFilter: false
                 }, {
-                    dataField: "itemWeightKPY", caption: "ItemWeightKPY", headerFilter: false
+                    dataField: "itemWeightKPY", caption: "ItemWeightKPY", headerFilter: false, dataType: 'float',
                 },
                 {
                     dataField: "jewelWeightKPY", caption: "JewelWeightKPY", headerFilter: false
@@ -210,7 +210,7 @@
                 ,
                 {
                     dataField: "smithID", caption: "Smith",
-                    calculateDisplayValue: "SmithDescription",
+                    calculateDisplayValue: "smithDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
@@ -225,7 +225,7 @@
                 {
                     dataField: "transactionDate", caption: "Transaction Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
                     cellTemplate: function (container, options) {
-                        container.text(options.data.TransactionDateString);
+                        container.text(options.data.transactionDateString);
                     }
                 },
                 {
@@ -304,7 +304,7 @@
                 },
                 {
                     dataField: "categoryID", caption: "Category",
-                    calculateDisplayValue: "CategoryDescription",
+                    calculateDisplayValue: "categoryDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
@@ -316,7 +316,7 @@
                 },
                 {
                     dataField: "subCategoryID", caption: "SubCategoryDescription",
-                    calculateDisplayValue: "SubCategoryDescription",
+                    calculateDisplayValue: "subCategoryDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
@@ -328,7 +328,7 @@
                 },
                 {
                     dataField: "itemCategoryID", caption: "ItemCategoryDescription",
-                    calculateDisplayValue: "ItemCategoryDescription",
+                    calculateDisplayValue: "itemCategoryDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
@@ -338,7 +338,7 @@
                 {
                     dataField: "regDate", caption: "Registered Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
                     cellTemplate: function (container, options) {
-                        container.text(options.data.RegDateString);
+                        container.text(options.data.regDateString);
                     }
                 },
 
@@ -369,7 +369,7 @@
                 ,
                 {
                     dataField: "smithID", caption: "Smith",
-                    calculateDisplayValue: "SmithDescription",
+                    calculateDisplayValue: "smithDescription",
                     lookup: {
                         valueExpr: "id",
                         displayExpr: "description",
@@ -384,7 +384,7 @@
                 {
                     dataField: "transactionDate", caption: "Transaction Date", dataType: "date", headerFilter: { groupInterval: "quarter" }, allowSearch: false,
                     cellTemplate: function (container, options) {
-                        container.text(options.data.TransactionDateString);
+                        container.text(options.data.transactionDateString);
                     }
                 },
                 {
@@ -814,7 +814,7 @@
 
                 loadData(url, "json", "GET", "application/x-www-form-urlencoded", params)
                     .then(function (result) {
-                        d.resolve(result.data == "" ? result.data : result.data.Value);
+                        d.resolve(result.data == "" ? result.data : result.data.value);
 
                     });
                 return d.promise();
@@ -824,7 +824,7 @@
                     params = { prefix: key };
                 loadData(url, "json", "GET", "application/x-www-form-urlencoded", params)
                     .then(function (result) {
-                        d.resolve(result.data == "" ? result.data : result.data.Value);
+                        d.resolve(result.data == "" ? result.data : result.data.value);
                     });
                 return d.promise();
             }

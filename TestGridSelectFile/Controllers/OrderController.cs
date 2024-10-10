@@ -220,7 +220,7 @@ namespace TestGridSelectFile.Controllers
         {
             try
             {
-                var result = _context.ReferenceCategories.ToList();
+                var result = await _context.ReferenceCategories.ToListAsync();
                 var jsonResult = new JsonResult(result.Select(r => new { text = "[" + r.CategoryCode + "] " + r.CategoryDescription, description = r.CategoryDescription, id = r.Id, code = r.CategoryCode }));
                 return Json(new { data = jsonResult, add = true });
             }
