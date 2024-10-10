@@ -26,7 +26,7 @@ public partial class StockItem
 
     public byte? Quality { get; set; }
 
-    public float? ItemWeightKpy { get; set; }
+    public Single? ItemWeightKpy { get; set; }
 
     public float? JewelWeightKpy { get; set; }
 
