@@ -85,7 +85,7 @@ namespace TestGridSelectFile.Controllers
                 ResponseResult<StockItem>? page = new ResponseResult<StockItem>();
                 page = await (from st in _context.StockItems
                               join refst in _context.ReferenceStores on st.StoreId equals refst.Id
-                              where (st.Enabled == true && refst.StoreId == 4)
+                              where (st.Enabled == true && refst.StoreId == 4 && st.ItemStatus == 0)
                               select st).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
                 return Json(new { data = page.Items, totalcount = page.TotalItemCount });
             }
@@ -144,7 +144,7 @@ namespace TestGridSelectFile.Controllers
                 ResponseResult<StockItem>? page = new ResponseResult<StockItem>();
                 page = await (from st in _context.StockItems
                               join refst in _context.ReferenceStores on st.StoreId equals refst.Id
-                              where (st.Enabled == false && refst.StoreId == 1)
+                              where (st.Enabled == false && refst.StoreId == 1 && st.ItemStatus == 1)
                               select st).ToPagedAsync(searchInfo.CurrentPageIndex, searchInfo.PageSize, sort);
                 return Json(new { data = page.Items, totalcount = page.TotalItemCount });
             }
